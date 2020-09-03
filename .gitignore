@@ -123,3 +123,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+# added for privacy
+todos.txt
+output.jpg

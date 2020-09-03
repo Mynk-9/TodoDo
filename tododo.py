@@ -3,7 +3,7 @@ import ctypes
 import pathlib
 
 
-class wallpaperSetter:
+class WallpaperSetter:
     def __init__(self, imageName):
         self.name = imageName
         self.path = str(pathlib.Path().absolute())
@@ -16,27 +16,55 @@ class wallpaperSetter:
 
 class TodoGenerator:
     def __init__(self):
-        self.todo = ""
         padding = " "*3
-        for i in range(1, 5+1):
-            self.todo += padding + "task" + str(i) + "\n"
+        f = open("todos.txt")
+        self.todos = [(padding+todo.strip()) for todo in f]
 
     def getList(self):
-        return self.todo
+        todosString = ""
+        for todo in self.todos:
+            todosString += todo + "\n"
+        return todosString
 
 
-image = Image.open('assets/background1.jpg')
-draw = ImageDraw.Draw(image)
-font = ImageFont.truetype('fonts/OpenSans-SemiBoldItalic.ttf', size=55)
+class WallpaperImageHandler:
+    def __init__(self, backgroundPath, coordsX=960, coordsY=50):
+        self.image = Image.open(backgroundPath)
+        self.draw = ImageDraw.Draw(self.image)
+        self.x = coordsX
+        self.y = coordsY
 
-(x, y) = (960, 50)
-todo = TodoGenerator()
-message = "Todo List:\n" + todo.getList()
-color = 'black'
+    def setText(self, message, fontPath, fontColor, fontSize):
+        font = ImageFont.truetype(fontPath, fontSize)
+        color = fontColor
+        self.draw.text((self.x, self.y), message, font=font, fill=color)
 
-draw.text((x, y), message, font=font, fill=color)
+    def save(self):
+        filename = 'output.jpg'
+        self.image.save(filename)
+        return filename
 
-image.save('output.jpg')
 
-ws = wallpaperSetter("output.jpg")
-ws.makeWallpaper()
+def main():
+    backgroundImage = 'assets/background3.jpg'
+    font = 'fonts/OpenSans-SemiBoldItalic.ttf'
+    fontColor = 'black'
+    fontSize = 55
+
+    todo = TodoGenerator()
+    message = "Todo List:\n" + todo.getList()
+
+    fontObj = ImageFont.truetype(
+        font=font, size=fontSize)
+    (width, height) = fontObj.getsize_multiline(message)
+
+    wih = WallpaperImageHandler(backgroundImage, coordsX=(
+        1920-width-10), coordsY=(1080-height)/2)
+    wih.setText(message, font, fontColor, fontSize)
+    imageName = wih.save()
+
+    ws = WallpaperSetter(imageName)
+    ws.makeWallpaper()
+
+
+main()
