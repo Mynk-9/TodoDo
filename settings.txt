@@ -1,0 +1,11 @@
+# line starting with a # will be ignored
+# 1) The first line contains the font name along with the relative path
+#    for example if the name of font file is myfont.ttf which is present
+#    in folder named myfolder then the first line would contain: 
+#    myfolder/myfont.ttf
+# 2) The second line contains the font size in numbers. For example if
+#    the required font size is 73 then the second line would contain:
+#    73
+# WARNING: DON'T LEAVE LINES BLANK
+fonts/OpenSans-BoldItalic.ttf
+55

@@ -12,7 +12,7 @@ class WallpaperSetter:
     def makeWallpaper(self):
         SPI_SETDESKWALLPAPER = 20
         ctypes.windll.user32.SystemParametersInfoW(
-            SPI_SETDESKWALLPAPER, 0, self.path+"\\"+self.name, 0)
+            SPI_SETDESKWALLPAPER, 0, self.path+"\\"+self.name, 1)
 
 
 class TodoGenerator:
