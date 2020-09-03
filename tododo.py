@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import ctypes
 import pathlib
+import random
 
 
 class WallpaperSetter:
@@ -28,8 +29,9 @@ class TodoGenerator:
 
 
 class WallpaperImageHandler:
-    def __init__(self, backgroundPath, coordsX=960, coordsY=50):
-        self.image = Image.open(backgroundPath)
+    def __init__(self, backgroundColor, coordsX=960, coordsY=50, screenSizeX=1920, screenSizeY=1080):
+        self.image = Image.new(
+            'RGB', (screenSizeX, screenSizeY), color=backgroundColor)
         self.draw = ImageDraw.Draw(self.image)
         self.x = coordsX
         self.y = coordsY
@@ -45,10 +47,20 @@ class WallpaperImageHandler:
         return filename
 
 
-def main():
-    backgroundImage = 'assets/background3.jpg'
-    font = 'fonts/OpenSans-SemiBoldItalic.ttf'
-    fontColor = 'black'
+def main(colorIndex):
+    colorCombinations = [
+        ('#166a68', '#CAF4F3'),     # 0
+        ('#FFF2CD', '#000000'),     # 1
+        ('#121212', '#BB86FC'),     # 2
+        ('#f5f0e1', '#1e3d59'),     # 3
+        ('#3b4d61', '#6b7b8c'),     # 4
+        ('rgb(45, 45, 45)', 'rgb(75, 74, 72)'),         # 5
+        ('rgb(52, 73, 94)', 'rgb(215, 215, 215)'),      # 6
+        ('rgb(74, 103, 98)', 'rgb(98, 134, 124)'),      # 7
+    ]
+
+    (backgroundColor, fontColor) = colorCombinations[colorIndex]
+    font = 'fonts/OpenSans-BoldItalic.ttf'
     fontSize = 55
 
     todo = TodoGenerator()
@@ -58,8 +70,9 @@ def main():
         font=font, size=fontSize)
     (width, height) = fontObj.getsize_multiline(message)
 
-    wih = WallpaperImageHandler(backgroundImage, coordsX=(
-        1920-width-10), coordsY=(1080-height)/2)
+    wih = WallpaperImageHandler(backgroundColor,
+                                coordsX=(1920-width-10),
+                                coordsY=(1080-height)/2)
     wih.setText(message, font, fontColor, fontSize)
     imageName = wih.save()
 
@@ -67,4 +80,4 @@ def main():
     ws.makeWallpaper()
 
 
-main()
+main(random.randint(0, 7))
