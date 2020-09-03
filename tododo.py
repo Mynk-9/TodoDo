@@ -47,6 +47,20 @@ class WallpaperImageHandler:
         return filename
 
 
+def loadFontSettings():
+    f = open("settings.txt")
+    i = 0
+    data = [""]*2
+    for line in f:
+        if (i == 2):
+            break
+        if line.strip()[0] == '#':
+            continue
+        data[i] = line.strip()
+        i += 1
+    return (data[0], int(data[1]))
+
+
 def main(colorIndex):
     colorCombinations = [
         ('#166a68', '#CAF4F3'),     # 0
@@ -60,8 +74,7 @@ def main(colorIndex):
     ]
 
     (backgroundColor, fontColor) = colorCombinations[colorIndex]
-    font = 'fonts/OpenSans-BoldItalic.ttf'
-    fontSize = 55
+    (font, fontSize) = loadFontSettings()
 
     todo = TodoGenerator()
     message = "Todo List:\n" + todo.getList()
