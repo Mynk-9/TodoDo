@@ -47,18 +47,18 @@ class WallpaperImageHandler:
         return filename
 
 
-def loadFontSettings():
+def loadSettings():
     f = open("settings.txt")
     i = 0
-    data = [""]*2
+    data = [""]*3
     for line in f:
-        if (i == 2):
+        if (i == 3):
             break
         if line.strip()[0] == '#':
             continue
         data[i] = line.strip()
         i += 1
-    return (data[0], int(data[1]))
+    return (data[0], int(data[1]), data[2])
 
 
 def main(colorIndex):
@@ -74,7 +74,7 @@ def main(colorIndex):
     ]
 
     (backgroundColor, fontColor) = colorCombinations[colorIndex]
-    (font, fontSize) = loadFontSettings()
+    (font, fontSize, position) = loadSettings()
 
     todo = TodoGenerator()
     message = "Todo List:\n" + todo.getList()
@@ -83,9 +83,20 @@ def main(colorIndex):
         font=font, size=fontSize)
     (width, height) = fontObj.getsize_multiline(message)
 
-    wih = WallpaperImageHandler(backgroundColor,
-                                coordsX=(1920-width-10),
-                                coordsY=(1080-height)/2)
+    X = 0   # x-position of todo
+    Y = 0   # y-position of todo
+    if position == 'l':
+        (X, Y) = (10, (1080-height)//2)
+    elif position == 'r':
+        (X, Y) = (1920-width-10, (1080-height)//2)
+    elif position == 't':
+        (X, Y) = ((1920-width)//2, 10)
+    elif position == 'b':
+        (X, Y) = ((1920-width)//2, 1080-height-10)
+    else:
+        (X, Y) = ((1920-width)//2, (1080-height)//2)
+
+    wih = WallpaperImageHandler(backgroundColor, coordsX=X, coordsY=Y)
     wih.setText(message, font, fontColor, fontSize)
     imageName = wih.save()
 
