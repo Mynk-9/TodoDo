@@ -9,7 +9,10 @@
 # 3) The third line contains info about the position of todo list text.
 #    Possible options are: l, t, r, b, c
 #    which read: left, top, right, bottom, center
+# 4) The fourth line contains info about the position of notices text.
+#    The pattern is same as point 3.
 # WARNING: DON'T LEAVE LINES BLANK
 fonts/OpenSans-BoldItalic.ttf
 55
 r
+l

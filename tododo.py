@@ -28,18 +28,29 @@ class TodoGenerator:
         return todosString
 
 
+class NoticeGenerator:
+    def __init__(self):
+        padding = " "*3
+        f = open("notices.txt")
+        self.notices = [(padding+notice.strip()) for notice in f]
+
+    def getList(self):
+        noticeString = ""
+        for notice in self.notices:
+            noticeString += notice + "\n"
+        return noticeString
+
+
 class WallpaperImageHandler:
-    def __init__(self, backgroundColor, coordsX=960, coordsY=50, screenSizeX=1920, screenSizeY=1080):
+    def __init__(self, backgroundColor, screenSizeX=1920, screenSizeY=1080):
         self.image = Image.new(
             'RGB', (screenSizeX, screenSizeY), color=backgroundColor)
         self.draw = ImageDraw.Draw(self.image)
-        self.x = coordsX
-        self.y = coordsY
 
-    def setText(self, message, fontPath, fontColor, fontSize):
+    def setText(self, message, fontPath, fontColor, fontSize, coordsX=960, coordsY=50):
         font = ImageFont.truetype(fontPath, fontSize)
         color = fontColor
-        self.draw.text((self.x, self.y), message, font=font, fill=color)
+        self.draw.text((coordsX, coordsY), message, font=font, fill=color)
 
     def save(self):
         filename = 'output.jpg'
@@ -50,15 +61,28 @@ class WallpaperImageHandler:
 def loadSettings():
     f = open("settings.txt")
     i = 0
-    data = [""]*3
+    data = [""]*4
     for line in f:
-        if (i == 3):
+        if (i == 4):
             break
         if line.strip()[0] == '#':
             continue
         data[i] = line.strip()
         i += 1
-    return (data[0], int(data[1]), data[2])
+    return (data[0], int(data[1]), data[2], data[3])
+
+
+def convertPositionData(position, width, height):
+    if position == 'l':     # left
+        return (10, (1080-height)//2)
+    elif position == 'r':   # right
+        return (1920-width-10, (1080-height)//2)
+    elif position == 't':   # top
+        return ((1920-width)//2, 10)
+    elif position == 'b':   # bottom
+        return ((1920-width)//2, 1080-height-10)
+    else:                   # center
+        return ((1920-width)//2, (1080-height)//2)
 
 
 def main(colorIndex):
@@ -74,30 +98,30 @@ def main(colorIndex):
     ]
 
     (backgroundColor, fontColor) = colorCombinations[colorIndex]
-    (font, fontSize, position) = loadSettings()
+    (font, fontSize, positionT, positionN) = loadSettings()
+    # positionT - position of the Todo list
+    # positionN - position of the Notice list
 
     todo = TodoGenerator()
-    message = "Todo List:\n" + todo.getList()
+    todos = "Todo List:\n" + todo.getList()
+    notice = NoticeGenerator()
+    notices = "Notices:\n" + notice.getList()
 
     fontObj = ImageFont.truetype(
         font=font, size=fontSize)
-    (width, height) = fontObj.getsize_multiline(message)
+    (widthT, heightT) = fontObj.getsize_multiline(todos)
+    (widthN, heightN) = fontObj.getsize_multiline(notices)
 
-    X = 0   # x-position of todo
-    Y = 0   # y-position of todo
-    if position == 'l':
-        (X, Y) = (10, (1080-height)//2)
-    elif position == 'r':
-        (X, Y) = (1920-width-10, (1080-height)//2)
-    elif position == 't':
-        (X, Y) = ((1920-width)//2, 10)
-    elif position == 'b':
-        (X, Y) = ((1920-width)//2, 1080-height-10)
-    else:
-        (X, Y) = ((1920-width)//2, (1080-height)//2)
+    Xt = 0   # x-position of todo
+    Yt = 0   # y-position of todo
+    Xn = 0   # x-position of notices
+    Yn = 0   # y-position of notices
+    (Xt, Yt) = convertPositionData(positionT, widthT, heightT)
+    (Xn, Yn) = convertPositionData(positionN, widthN, heightN)
 
-    wih = WallpaperImageHandler(backgroundColor, coordsX=X, coordsY=Y)
-    wih.setText(message, font, fontColor, fontSize)
+    wih = WallpaperImageHandler(backgroundColor)
+    wih.setText(todos, font, fontColor, fontSize, coordsX=Xt, coordsY=Yt)
+    wih.setText(notices, font, fontColor, fontSize, coordsX=Xn, coordsY=Yn)
     imageName = wih.save()
 
     ws = WallpaperSetter(imageName)
