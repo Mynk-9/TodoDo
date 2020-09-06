@@ -65,15 +65,15 @@ class WallpaperImageHandler:
 def loadSettings():
     f = open("settings.txt")
     i = 0
-    data = [""]*4
+    data = [""]*6
     for line in f:
-        if (i == 4):
+        if (i == 6):
             break
         if line.strip()[0] == '#':
             continue
         data[i] = line.strip()
         i += 1
-    return (data[0], int(data[1]), data[2], data[3])
+    return ((data[0], int(data[1]), data[2]), (data[3], int(data[4]), data[5]))
 
 
 def convertPositionData(position, width, height):
@@ -102,9 +102,9 @@ def main(colorIndex):
     ]
 
     (backgroundColor, fontColor) = colorCombinations[colorIndex]
-    (font, fontSize, positionT, positionN) = loadSettings()
-    # positionT - position of the Todo list
-    # positionN - position of the Notice list
+    ((fontT, fontSizeT, positionT), (fontN, fontSizeN, positionN)) = loadSettings()
+    # *T - for Todo list
+    # *N - for Notice list
 
     todo = TodoGenerator()
     todos = "Todo List:\n" + todo.getList()
@@ -112,8 +112,10 @@ def main(colorIndex):
     notices = "Notices:\n" + notice.getList()
 
     fontObj = ImageFont.truetype(
-        font=font, size=fontSize)
+        font=fontT, size=fontSizeT)
     (widthT, heightT) = fontObj.getsize_multiline(todos)
+    fontObj = ImageFont.truetype(
+        font=fontN, size=fontSizeN)
     (widthN, heightN) = fontObj.getsize_multiline(notices)
 
     Xt = 0   # x-position of todo
@@ -124,8 +126,8 @@ def main(colorIndex):
     (Xn, Yn) = convertPositionData(positionN, widthN, heightN)
 
     wih = WallpaperImageHandler(backgroundColor)
-    wih.setText(todos, font, fontColor, fontSize, coordsX=Xt, coordsY=Yt)
-    wih.setText(notices, font, fontColor, fontSize, coordsX=Xn, coordsY=Yn)
+    wih.setText(todos, fontT, fontColor, fontSizeT, coordsX=Xt, coordsY=Yt)
+    wih.setText(notices, fontN, fontColor, fontSizeN, coordsX=Xn, coordsY=Yn)
     imageName = wih.save()
 
     ws = WallpaperSetter(imageName)
