@@ -18,7 +18,9 @@ class WallpaperSetter:
 class TodoGenerator:
     def __init__(self):
         padding = " "*3
-        f = open("todos.txt")
+        f = open("todos.txt", "a")
+        f.close()
+        f = open("todos.txt", "r")
         self.todos = [(padding+todo.strip()) for todo in f]
 
     def getList(self):
@@ -31,7 +33,9 @@ class TodoGenerator:
 class NoticeGenerator:
     def __init__(self):
         padding = " "*3
-        f = open("notices.txt")
+        f = open("notices.txt", "a")
+        f.close()
+        f = open("notices.txt", "r")
         self.notices = [(padding+notice.strip()) for notice in f]
 
     def getList(self):
