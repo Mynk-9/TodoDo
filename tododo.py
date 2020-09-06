@@ -77,14 +77,16 @@ def loadSettings():
 
 
 def convertPositionData(position, width, height):
+    # return format (X, Y)
+    padding = 20
     if position == 'l':     # left
-        return (10, (1080-height)//2)
+        return (padding, (1080-height)//2)
     elif position == 'r':   # right
-        return (1920-width-10, (1080-height)//2)
+        return (1920-width-padding, (1080-height)//2)
     elif position == 't':   # top
-        return ((1920-width)//2, 10)
+        return ((1920-width)//2, padding)
     elif position == 'b':   # bottom
-        return ((1920-width)//2, 1080-height-10)
+        return ((1920-width)//2, 1080-height-padding)
     else:                   # center
         return ((1920-width)//2, (1080-height)//2)
 
