@@ -18,4 +18,4 @@ r
 # following settings for notices:
 fonts/OpenSans-BoldItalic.ttf
 35
-b
+l

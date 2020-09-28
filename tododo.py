@@ -73,7 +73,32 @@ def loadSettings():
             continue
         data[i] = line.strip()
         i += 1
+    f.close()
     return ((data[0], int(data[1]), data[2]), (data[3], int(data[4]), data[5]))
+
+def getColorConfig():
+    f = open("color_config.txt")
+    colors = {}
+    colors_count = 0
+    select = ''
+    for line in f:
+        l = line.strip()
+        if l[0] == '#':
+            continue
+        elif colors_count != 0:
+            vals = [ x.strip() for x in l.split(';')]
+            colors[str(vals[0])] = [vals[1], vals[2]]
+            colors_count -= 1
+        elif l[0:7] == 'colors:':
+            colors_count = int(l[8:].strip())
+        elif l[0:7] == 'select:':
+            select = l[8:].strip()
+    if select == 'random':
+        x = random.randint(0, len(colors)-1)
+        l = list(colors)
+        select = str(l[x])
+        
+    return (colors[select][0], colors[select][1])
 
 
 def convertPositionData(position, width, height):
@@ -91,19 +116,8 @@ def convertPositionData(position, width, height):
         return ((1920-width)//2, (1080-height)//2)
 
 
-def main(colorIndex):
-    colorCombinations = [
-        ('#166a68', '#CAF4F3'),     # 0
-        ('#FFF2CD', '#000000'),     # 1
-        ('#121212', '#BB86FC'),     # 2
-        ('#f5f0e1', '#1e3d59'),     # 3
-        ('#3b4d61', '#6b7b8c'),     # 4
-        ('rgb(45, 45, 45)', 'rgb(75, 74, 72)'),         # 5
-        ('rgb(52, 73, 94)', 'rgb(215, 215, 215)'),      # 6
-        ('rgb(74, 103, 98)', 'rgb(98, 134, 124)'),      # 7
-    ]
-
-    (backgroundColor, fontColor) = colorCombinations[colorIndex]
+def main():
+    (backgroundColor, fontColor) = getColorConfig()
     ((fontT, fontSizeT, positionT), (fontN, fontSizeN, positionN)) = loadSettings()
     # *T - for Todo list
     # *N - for Notice list
@@ -136,4 +150,4 @@ def main(colorIndex):
     ws.makeWallpaper()
 
 
-main(random.randint(0, 7))
+main()
