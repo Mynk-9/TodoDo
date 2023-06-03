@@ -1,15 +1,14 @@
 # colors available
-# the combinations are serial_number; background_color; font_color
-# keep serial_number unique for each combination
-colors: 8
-1; #166a68; #CAF4F3
-2; #FFF2CD; #000000
-3; #121212; #BB86FC
-4; #f5f0e1; #1e3d59
-5; #3b4d61; #6b7b8c
-6; rgb(45, 45, 45); rgb(75, 74, 72)
-7; rgb(52, 73, 94); rgb(215, 215, 215)
-8; rgb(74, 103, 98); rgb(98, 134, 124)
-# selection: 
-# either write some number or "random" without quotes
-select: 7
+# following are example color combinations
+# 
+# #166a68; #CAF4F3
+# #FFF2CD; #000000
+# #121212; #BB86FC
+# #f5f0e1; #1e3d59
+# #3b4d61; #6b7b8c
+# rgb(45, 45, 45); rgb(75, 74, 72)
+# rgb(52, 73, 94); rgb(215, 215, 215)
+# rgb(74, 103, 98); rgb(98, 134, 124)
+
+BACKGROUND_COLOR="rgb(52, 73, 94)"
+FONT_COLOR="rgb(215, 215, 215)"

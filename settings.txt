@@ -1,21 +1,14 @@
-# line starting with a # will be ignored
-# 1) The first line contains the font name along with the relative path
-#    for example if the name of font file is myfont.ttf which is present
-#    in folder named myfolder then the first line would contain: 
-#    myfolder/myfont.ttf
-# 2) The second line contains the font size in numbers. For example if
-#    the required font size is 73 then the second line would contain:
-#    73
-# 3) The third line contains info about the position of todo list text.
-#    Possible options are: l, t, r, b, c
-#    which read: left, top, right, bottom, center
-# 4) The pattern of the previous 3 lines is repeated for the notices.
-# WARNING: DON'T LEAVE LINES BLANK
-# following settings for todo list:
-fonts/OpenSans-BoldItalic.ttf
-55
-r
-# following settings for notices:
-fonts/OpenSans-BoldItalic.ttf
-35
-l
+# fonts are relative paths to TTF fonts
+# font size is a natural numbers
+# position can be: l, r, t, b, c, tr, tl, br, bl
+#          left, right, top, bottom, center, top-right, top-left, bottom-right, bottom-left
+
+TODO_FONT=fonts/OpenSans-BoldItalic.ttf
+TODO_SIZE=50
+TODO_POSITION=t
+TODO_PADDING=100
+
+NOTICE_FONT=fonts/OpenSans-BoldItalic.ttf
+NOTICE_SIZE=30
+NOTICE_POSITION=l
+NOTICE_PADDING=20
